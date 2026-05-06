@@ -37,8 +37,8 @@ class HouseData(BaseModel):
     Latitude: float
     Longitude: float
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
+@app.get("/")
+async def homepage(request: Request):
 
     return templates.TemplateResponse(
         "index.html",
