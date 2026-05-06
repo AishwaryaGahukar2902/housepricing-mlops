@@ -1,10 +1,7 @@
 venv/
 __pycache__/
-
 mlruns/
 data/
-
-*.pkl
 *.csv
 *.pyc
 
