@@ -1,20 +1,23 @@
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi import Request
-
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 import numpy as np
 import joblib
 import os
 
+# ---------------------------------------------------
+# FastAPI App
+# ---------------------------------------------------
+
 app = FastAPI()
 
-templates = Jinja2Templates(directory="templates")
-
+# ---------------------------------------------------
 # Enable CORS
+# ---------------------------------------------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,11 +26,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ---------------------------------------------------
+# Templates
+# ---------------------------------------------------
 
-model = joblib.load("models/model.pkl")
-scaler = joblib.load("models/scaler.pkl")
+templates = Jinja2Templates(directory="templates")
+
+# ---------------------------------------------------
+# Load Model and Scaler
+# ---------------------------------------------------
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model_path = os.path.join(BASE_DIR, "models", "model.pkl")
+
+scaler_path = os.path.join(BASE_DIR, "models", "scaler.pkl")
+
+model = joblib.load(model_path)
+
+scaler = joblib.load(scaler_path)
+
+# ---------------------------------------------------
+# Request Schema
+# ---------------------------------------------------
 
 class HouseData(BaseModel):
+
     MedInc: float
     HouseAge: float
     AveRooms: float
@@ -37,18 +61,27 @@ class HouseData(BaseModel):
     Latitude: float
     Longitude: float
 
-@app.get("/")
-async def homepage(request: Request):
+# ---------------------------------------------------
+# Home Route
+# ---------------------------------------------------
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
 
     return templates.TemplateResponse(
         "index.html",
         {"request": request}
     )
 
+# ---------------------------------------------------
+# Prediction Route
+# ---------------------------------------------------
+
 @app.post("/predict")
 def predict(data: HouseData):
 
     input_data = np.array([[
+
         data.MedInc,
         data.HouseAge,
         data.AveRooms,
@@ -57,9 +90,13 @@ def predict(data: HouseData):
         data.AveOccup,
         data.Latitude,
         data.Longitude
+
     ]])
 
     scaled_data = scaler.transform(input_data)
+
     prediction = model.predict(scaled_data)
 
-    return {"Predicted Price": float(prediction[0])}
+    return {
+        "Predicted Price": float(prediction[0])
+    }

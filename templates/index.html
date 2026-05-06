@@ -1,177 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>House Price Prediction</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+    <title>House Price Prediction</title>
 
-    body {
-      background: #f4f7fb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    <style>
 
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
+        body {
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .input-group {
-      margin-bottom: 15px;
-    }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+        }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #444;
-    }
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1e3a8a;
+        }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+        .input-group {
+            margin-bottom: 15px;
+        }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
 
-    button:hover {
-      background: #1d4ed8;
-    }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
 
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      background: #eef2ff;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: #1e3a8a;
-    }
-  </style>
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef2ff;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+    </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>House Price Prediction</h1>
+    <div class="container">
 
-    <div class="input-group">
-      <label>Median Income</label>
-      <input type="number" id="MedInc" step="any" />
+        <h1>House Price Prediction</h1>
+
+        <div class="input-group">
+            <label>Median Income</label>
+            <input type="number" id="MedInc" step="any" value="8.3252">
+        </div>
+
+        <div class="input-group">
+            <label>House Age</label>
+            <input type="number" id="HouseAge" step="any" value="41">
+        </div>
+
+        <div class="input-group">
+            <label>Average Rooms</label>
+            <input type="number" id="AveRooms" step="any" value="6.984">
+        </div>
+
+        <div class="input-group">
+            <label>Average Bedrooms</label>
+            <input type="number" id="AveBedrms" step="any" value="1.023">
+        </div>
+
+        <div class="input-group">
+            <label>Population</label>
+            <input type="number" id="Population" step="any" value="322">
+        </div>
+
+        <div class="input-group">
+            <label>Average Occupancy</label>
+            <input type="number" id="AveOccup" step="any" value="2.555">
+        </div>
+
+        <div class="input-group">
+            <label>Latitude</label>
+            <input type="number" id="Latitude" step="any" value="37.88">
+        </div>
+
+        <div class="input-group">
+            <label>Longitude</label>
+            <input type="number" id="Longitude" step="any" value="-122.23">
+        </div>
+
+        <button onclick="predictPrice()">
+            Predict Price
+        </button>
+
+        <div class="result" id="result">
+            Predicted Price: --
+        </div>
+
     </div>
 
-    <div class="input-group">
-      <label>House Age</label>
-      <input type="number" id="HouseAge" step="any" />
-    </div>
+    <script>
 
-    <div class="input-group">
-      <label>Average Rooms</label>
-      <input type="number" id="AveRooms" step="any" />
-    </div>
+        async function predictPrice() {
 
-    <div class="input-group">
-      <label>Average Bedrooms</label>
-      <input type="number" id="AveBedrms" step="any" />
-    </div>
+            const data = {
 
-    <div class="input-group">
-      <label>Population</label>
-      <input type="number" id="Population" step="any" />
-    </div>
+                MedInc: parseFloat(
+                    document.getElementById("MedInc").value
+                ),
 
-    <div class="input-group">
-      <label>Average Occupancy</label>
-      <input type="number" id="AveOccup" step="any" />
-    </div>
+                HouseAge: parseFloat(
+                    document.getElementById("HouseAge").value
+                ),
 
-    <div class="input-group">
-      <label>Latitude</label>
-      <input type="number" id="Latitude" step="any" />
-    </div>
+                AveRooms: parseFloat(
+                    document.getElementById("AveRooms").value
+                ),
 
-    <div class="input-group">
-      <label>Longitude</label>
-      <input type="number" id="Longitude" step="any" />
-    </div>
+                AveBedrms: parseFloat(
+                    document.getElementById("AveBedrms").value
+                ),
 
-    <button onclick="predictPrice()">Predict Price</button>
+                Population: parseFloat(
+                    document.getElementById("Population").value
+                ),
 
-    <div class="result" id="result">
-      Predicted Price: --
-    </div>
-  </div>
+                AveOccup: parseFloat(
+                    document.getElementById("AveOccup").value
+                ),
 
-  <script>
-    async function predictPrice() {
+                Latitude: parseFloat(
+                    document.getElementById("Latitude").value
+                ),
 
-      const data = {
-        MedInc: parseFloat(document.getElementById("MedInc").value),
-        HouseAge: parseFloat(document.getElementById("HouseAge").value),
-        AveRooms: parseFloat(document.getElementById("AveRooms").value),
-        AveBedrms: parseFloat(document.getElementById("AveBedrms").value),
-        Population: parseFloat(document.getElementById("Population").value),
-        AveOccup: parseFloat(document.getElementById("AveOccup").value),
-        Latitude: parseFloat(document.getElementById("Latitude").value),
-        Longitude: parseFloat(document.getElementById("Longitude").value)
-      };
+                Longitude: parseFloat(
+                    document.getElementById("Longitude").value
+                )
+            };
 
-      try {
+            try {
 
-        const response = await fetch("http://127.0.0.1:8000", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+                const response = await fetch("/predict", {
 
-        const result = await response.json();
+                    method: "POST",
 
-        document.getElementById("result").innerHTML =
-          `Predicted Price: ${result["Predicted House Price"]}`;
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-      } catch (error) {
+                    body: JSON.stringify(data)
 
-        document.getElementById("result").innerHTML =
-          "Error connecting to API";
-      }
-    }
-  </script>
+                });
+
+                const result = await response.json();
+
+                document.getElementById("result").innerHTML =
+                    "Predicted Price: " +
+                    result["Predicted Price"];
+
+            }
+
+            catch (error) {
+
+                document.getElementById("result").innerHTML =
+                    "Error connecting to API";
+
+                console.error(error);
+            }
+        }
+
+    </script>
 
 </body>
+
 </html>
