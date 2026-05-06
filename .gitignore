@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+
+mlruns/
+models/
+data/
+
+*.pkl
+*.csv
+*.pyc
+
+dvc-storage/
+.ipynb_checkpoints/
