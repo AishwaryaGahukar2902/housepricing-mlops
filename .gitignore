@@ -2,7 +2,6 @@ venv/
 __pycache__/
 
 mlruns/
-models/
 data/
 
 *.pkl
