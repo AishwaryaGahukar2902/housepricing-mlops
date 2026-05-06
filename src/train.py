@@ -16,7 +16,6 @@ from sklearn.ensemble import (
     GradientBoostingRegressor
 )
 
-from xgboost import XGBRegressor
 
 from data_preprocessing import (
     preprocess_data,
@@ -67,13 +66,6 @@ models = {
         random_state=42
     ),
 
-    "XGBoost": XGBRegressor(
-        n_estimators=100,
-        learning_rate=0.1,
-        max_depth=5,
-        random_state=42,
-        objective="reg:squarederror"
-    )
 }
 
 # =========================================================
