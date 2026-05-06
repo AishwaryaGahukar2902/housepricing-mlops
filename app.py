@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +11,8 @@ import joblib
 import os
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 # Enable CORS
 app.add_middleware(
@@ -33,9 +37,13 @@ class HouseData(BaseModel):
     Latitude: float
     Longitude: float
 
-@app.get("/")
-def home():
-    return {"message": "House Price Prediction API"}
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
 @app.post("/predict")
 def predict(data: HouseData):
